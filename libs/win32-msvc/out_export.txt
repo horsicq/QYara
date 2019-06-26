@@ -1,0 +1,19 @@
+Microsoft (R) COFF/PE Dumper Version 12.00.21005.1
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file yara.lib
+
+File Type: LIBRARY
+
+  Summary
+
+          44 .bss
+        1ED8 .data
+        21D0 .debug$F
+        1128 .debug$S
+         F77 .drectve
+        6F1F .rdata
+           4 .sxdata
+       2754C .text
+          34 .xdata$x
