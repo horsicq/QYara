@@ -34,4 +34,3 @@ unix:macx {
 }
 
 include(../QOpenSSL/openssl.pri)
-
