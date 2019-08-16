@@ -30,6 +30,7 @@
 class QYara : public QObject
 {
     Q_OBJECT
+
 public:
     struct RESULT
     {
