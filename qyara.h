@@ -39,7 +39,7 @@ public:
         QList<QString> listRecords;
     };
 
-    explicit QYara(QObject *parent = nullptr);
+    explicit QYara(QObject *parent=nullptr);
     ~QYara();
     bool loadRulesFile(QString sFileName);
     bool loadRules(QString sRules);
