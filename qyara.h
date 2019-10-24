@@ -43,7 +43,7 @@ public:
     ~QYara();
     bool loadRulesFile(QString sFileName);
     bool loadRules(QString sRules);
-    bool freeRules();
+    void freeRules();
     QList<QString> scanFile(QString sFileName);
     static int callback_function(int message,void *message_data,void *user_data);
 
@@ -54,8 +54,10 @@ signals:
     void errorMessage(QString sText);
 
 private:
+    bool bCompilerLoaded;
     bool bRulesLoaded;
     YR_COMPILER *yrCompiler;
+    YR_RULES *yrRules;
     QList<QString> listResult;
 };
 

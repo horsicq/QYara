@@ -23,8 +23,10 @@
 QYara::QYara(QObject *parent) : QObject(parent)
 {
     yr_initialize();
+    bCompilerLoaded=false;
     bRulesLoaded=false;
     yrCompiler=0;
+    yrRules=0;
     // TODO: set callback
 }
 
@@ -60,31 +62,38 @@ bool QYara::loadRules(QString sRules)
 
     if(yr_compiler_create(&yrCompiler)==ERROR_SUCCESS)
     {
+        bCompilerLoaded=true;
         if(yr_compiler_add_string(yrCompiler,sRules.toLatin1().data(),"Rules")==0)
         {
-            bRulesLoaded=true;
-            bResult=true;
+            if(yr_compiler_get_rules(yrCompiler,&yrRules)==ERROR_SUCCESS)
+            {
+                bRulesLoaded=true;
+                bResult=true;
+            }
         }
     }
 
     return bResult;
 }
 
-bool QYara::freeRules()
+void QYara::freeRules()
 {
-    bool bResult=false;
-
     if(bRulesLoaded)
+    {
+        yr_rules_destroy(yrRules);
+
+        bRulesLoaded=false;
+    }
+
+    if(bCompilerLoaded)
     {
         yr_compiler_destroy(yrCompiler);
 
-        bRulesLoaded=false;
-        yrCompiler=0;
-
-        bResult=true;
+        bCompilerLoaded=false;
     }
 
-    return bResult;
+    yrCompiler=0;
+    yrRules=0;
 }
 
 QList<QString> QYara::scanFile(QString sFileName)
@@ -93,18 +102,10 @@ QList<QString> QYara::scanFile(QString sFileName)
 
     if(bRulesLoaded)
     {
-        YR_RULES *yrRules=0;
-
-        if(yr_compiler_get_rules(yrCompiler,&yrRules)==ERROR_SUCCESS)
+        if(yr_rules_scan_file(yrRules,sFileName.toLatin1().data(),0,(YR_CALLBACK_FUNC)callback_function,(void *)this,0)==ERROR_SUCCESS)
         {
-            if(yr_rules_scan_file(yrRules,sFileName.toLatin1().data(),0,(YR_CALLBACK_FUNC)callback_function,(void *)this,0)==ERROR_SUCCESS)
-            {
-                // TODO
-            }
-
-            yr_rules_destroy(yrRules);
+            // TODO
         }
-
     }
 
     return listResult;
@@ -123,7 +124,7 @@ int QYara::callback_function(int message,void *message_data,void *user_data)
 
 QYara::RESULT QYara::scanFile(QString sFileName, QString sRules)
 {
-    RESULT result= {0};
+    RESULT result={0};
     QElapsedTimer scanTimer;
     scanTimer.start();
 
