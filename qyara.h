@@ -44,7 +44,7 @@ public:
     bool loadRulesFile(QString sFileName);
     bool loadRules(QString sRules);
     void freeRules();
-    QList<QString> scanFile(QString sFileName);
+    RESULT scanFile(QString sFileName);
     static int callback_function(int message,void *message_data,void *user_data);
 
     static RESULT scanFile(QString sFileName,QString sRules);

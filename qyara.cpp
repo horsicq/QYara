@@ -96,8 +96,12 @@ void QYara::freeRules()
     yrRules=0;
 }
 
-QList<QString> QYara::scanFile(QString sFileName)
+QYara::RESULT QYara::scanFile(QString sFileName)
 {
+    RESULT result={0};
+    QElapsedTimer scanTimer;
+    scanTimer.start();
+
     listResult.clear();
 
     if(bRulesLoaded)
@@ -108,7 +112,11 @@ QList<QString> QYara::scanFile(QString sFileName)
         }
     }
 
-    return listResult;
+    result.listRecords=listResult;
+    result.sFileName=sFileName;
+    result.nScanTime=scanTimer.elapsed();
+
+    return result;
 }
 
 int QYara::callback_function(int message,void *message_data,void *user_data)
@@ -125,14 +133,12 @@ int QYara::callback_function(int message,void *message_data,void *user_data)
 QYara::RESULT QYara::scanFile(QString sFileName, QString sRules)
 {
     RESULT result={0};
-    QElapsedTimer scanTimer;
-    scanTimer.start();
 
     QYara yara;
-    yara.loadRules(sRules);
-    result.listRecords=yara.scanFile(sFileName);
-    result.sFileName=sFileName;
-    result.nScanTime=scanTimer.elapsed();
+    if(yara.loadRules(sRules))
+    {
+        result=yara.scanFile(sFileName);
+    }
 
     return result;
 }
