@@ -18,8 +18,10 @@ win32-msvc* {
     } else {
         LIBS += $$PWD/libs/win32-msvc/yara.lib
     }
+#
 #    LIBS += Advapi32.lib
 }
+
 unix:!macx {
     BITSIZE = $$system(getconf LONG_BIT)
     if (contains(BITSIZE, 64)) {
@@ -32,5 +34,7 @@ unix:!macx {
 unix:macx {
     LIBS +=  $$PWD/libs/mac/libyara.a
 }
+
+
 
 include(../QOpenSSL/openssl.pri)

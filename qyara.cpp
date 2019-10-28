@@ -18,6 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
+
+#ifdef X_YARA_LEGACY_STDIO_DEFS
+#if defined(_MSC_VER)
+#if _MSC_VER > 1800
+#pragma comment(lib, "legacy_stdio_definitions.lib") // __imp__fprintf
+#include <stdio.h>
+FILE _iob[]={*stdin, *stdout, *stderr}; // _iob_func
+
+extern "C" FILE *__cdecl __iob_func(void)
+{
+    return _iob;
+}
+#endif
+#endif
+#endif
+
 #include "qyara.h"
 
 QYara::QYara(QObject *parent) : QObject(parent)

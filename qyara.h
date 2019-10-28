@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-#ifndef QDISASM_H
-#define QDISASM_H
+#ifndef QYARA_H
+#define QYARA_H
 
 #include <QObject>
 #include <QFile>
@@ -61,4 +61,4 @@ private:
     QList<QString> listResult;
 };
 
-#endif // QDISASM_H
+#endif // QYARA_H
